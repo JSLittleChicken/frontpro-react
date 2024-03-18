@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  display: flex;
 }
 
 .App-logo {
@@ -36,31 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.side-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background-color: rosybrown;
-  padding-right: 50px;
-  padding-left: 50px;
-  padding-top: 20px;
-}
-.side-bar a {
-  text-decoration: none;
-}
-
-.header {
-  background-color: aquamarine;
-}
-
-.main-container {
-background-color: burlywood;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-
 }

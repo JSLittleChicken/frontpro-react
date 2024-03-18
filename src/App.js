@@ -1,16 +1,25 @@
-import Header from './components/Header/Header';
-import Main from './components/Main/Main';
-import Aside from './components/Aside/Aside'
-import './App.css';
+import React from "react";
+import SmileList from './components/SmileList/SmileList'
+
+const smileList = [
+  {
+    id: 1,
+    symbol: "😀"
+  },
+  {
+    id: 2,
+    symbol: "😁"
+  },
+  {
+    id: 3,
+    symbol: "😅"
+  }
+]
 
 function App (props) {
   return (
     <div className="App">
-      <Aside />
-      <div className="main">
-        <Header />
-        <Main />
-      </div>
+      <SmileList smileList={smileList}/>
     </div>
   );
 }
