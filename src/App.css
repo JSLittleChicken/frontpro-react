@@ -58,3 +58,8 @@ table td {
   border: none;
   border-bottom: 5px solid #F2F8F8;
 }
+
+
+.hidden {
+  display: none;
+}
