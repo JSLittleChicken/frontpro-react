@@ -1,34 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 import ContactsList from './components/ContactsList/ContactsList';
 import AddContactForm from './components/AddContactForm/AddContactForm';
 import './App.css';
-// import data from "./contacts-data.json";
-// I tried both local json and fetching from API
+import { Component } from "react";
 
-async function getData() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  const res = await response.json();
-  return res;
-}
-const data = await getData();
-
-const App = () => {
-
-  const [contacts, setContacts] = useState(data.map(
-    (c) => {
-      return { id: c.id, name: c.name, phone: c.phone, username: c.username }
-    }));
-
-  function addContact(contact) {
-    setContacts([...contacts, { ...contact, id: Math.max(...contacts.map(c => c.id)) + 1 }]);
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      contacts: []
+    }
+    this.addContact = this.addContact.bind(this)
+    this.setContacts = this.setContacts.bind(this)
   }
 
-  return (
-    <div className="App">
-      <ContactsList contacts={contacts} updateContacts={setContacts} />
-      <AddContactForm addContact={addContact} />
-    </div>
-  )
+  addContact(contact) {
+    if (contact.name && contact.phone && contact.username) {
+      this.setState({ contacts: [...this.state.contacts, { ...contact, id: Math.max(...this.state.contacts.map(c => c.id)) + 1 }] });
+    }
+  }
+
+  setContacts(cList) {
+    this.setState({
+      contacts: cList
+    })
+  }
+
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => response.json())
+      .then(data => this.setState(
+        { contacts: data.map((c) => { return { id: c.id, name: c.name, phone: c.phone, username: c.username } }) }
+      ))
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <ContactsList contacts={this.state.contacts} updateContacts={this.setContacts} />
+        <AddContactForm addContact={this.addContact} />
+      </div>
+    )
+  }
 }
 
 export default App;

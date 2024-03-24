@@ -1,54 +1,87 @@
+import { Component } from "react";
 
-import { useState } from "react";
+class AddContactForm extends Component {
 
-const AddContactForm = (props) => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            formData: { name: "", phone: "", username: "" },
+            isFormVisible: false,
+            isButtonVisible: true
+        };
 
-    const [formData, setFormData] = useState({ name: "", phone: "", username: "" });
-    const [isFormVisible, setIsFormVisible] = useState(false);
-    const [isButtonVisible, setIsButtonVisible] = useState(true);
+        this.handleCancelClick = this.handleCancelClick.bind(this);
+        this.setFormData = this.setFormData.bind(this);
+        this.setIsFormVisible = this.setIsFormVisible.bind(this);
+        this.setIsButtonVisible = this.setIsButtonVisible.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        
+    }
 
-    function handleSubmit(e) {
+    setFormData(data) {
+        this.setState({
+            formData: data
+        })
+    }
+
+    setIsFormVisible(isVisible) {
+        this.setState({
+            isFormVisible: isVisible
+        })
+    }
+
+    setIsButtonVisible(isVisible) {
+        this.setState({
+            isButtonVisible: isVisible
+        })
+    }
+
+
+    handleSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
         const contact = Object.fromEntries(data.entries());
-        props.addContact(contact);
-        setFormData({ name: "", phone: "", username: "" })
-        setIsFormVisible(false);
-        setIsButtonVisible(true);
+        this.props.addContact(contact);
+        this.setFormData({ name: "", phone: "", username: "" })
+        this.setIsFormVisible(false);
+        this.setIsButtonVisible(true);
     }
 
-    function handleCancelClick() {
-        setFormData({ name: "", phone: "", username: "" })
-        setIsFormVisible(false);
-        setIsButtonVisible(true);
+    handleCancelClick() {
+        this.setFormData({ name: "", phone: "", username: "" })
+        this.setIsFormVisible(false);
+        this.setIsButtonVisible(true);
     }
 
-    return (
-        <div>
-            <button className={isButtonVisible ? '' : 'hidden'} onClick={() => {setIsButtonVisible(false); setIsFormVisible(true)}}>Add new contact</button>
-            <div className={isFormVisible ? '' : 'hidden'}>
-                <h2>Add a new contact</h2>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        value={formData.name}
-                        onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
-                        type="text" name="name" required="required" placeholder="enter your name"
-                    />
-                    <input
-                        value={formData.username}
-                        onChange={(e) => { setFormData({ ...formData, username: e.target.value }) }}
-                        type="text" name="username" required="required" placeholder="enter your username"
-                    />
-                    <input
-                        value={formData.phone}
-                        onChange={(e) => { setFormData({ ...formData, phone: e.target.value }) }}
-                        type="tel" name="phone" required="required" placeholder="enter your phone number" />
-                    <button type="submit">Add</button>
-                    <button onClick={handleCancelClick}>Cancel</button>
-                </form>
+    render () {
+        return (
+            <div>
+                <button className={this.state.isButtonVisible ? '' : 'hidden'} onClick={() => {this.setIsButtonVisible(false); this.setIsFormVisible(true)}}>Add new contact</button>
+                <div className={this.state.isFormVisible ? '' : 'hidden'}>
+                    <h2>Add a new contact</h2>
+                    <form onSubmit={this.handleSubmit}>
+                        <input
+                            value={this.state.formData.name}
+                            onChange={(e) => { this.setFormData({ ...this.state.formData, name: e.target.value }) }}
+                            type="text" name="name" required={this.state.isFormVisible ? true : false} placeholder="enter your name"
+                        />
+                        <input
+                            value={this.state.formData.username}
+                            onChange={(e) => { this.setFormData({ ...this.state.formData, username: e.target.value }) }}
+                            type="text" name="username" required={this.state.isFormVisible ? true : false} placeholder="enter your username"
+                        />
+                        <input
+                            value={this.state.formData.phone}
+                            onChange={(e) => { this.setFormData({ ...this.state.formData, phone: e.target.value }) }}
+                            type="tel" name="phone" required={this.state.isFormVisible ? true : false} placeholder="enter your phone number" />
+                        <button type="submit">Add</button>
+                        <button onClick={this.handleCancelClick}>Cancel</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
+    
 }
 
 export default AddContactForm;
