@@ -1,47 +1,39 @@
-import React from "react";
-import ContactsList from './components/ContactsList/ContactsList';
-import AddContactForm from './components/AddContactForm/AddContactForm';
+
 import './App.css';
-import { Component } from "react";
+import ToDoForm from './components/ToDoForm/ToDoForm';
+import Task from './components/Task/Task';
+import { useState } from "react";
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      contacts: []
-    }
-    this.addContact = this.addContact.bind(this)
-    this.setContacts = this.setContacts.bind(this)
+function App() {
+  const [tasks, setTasks] = useState([]);
+
+  function addTask(name) {
+    setTasks(prev => {
+      return [...prev, { name: name, done: false }];
+    });
   }
 
-  addContact(contact) {
-    if (contact.name && contact.phone && contact.username) {
-      this.setState({ contacts: [...this.state.contacts, { ...contact, id: Math.max(...this.state.contacts.map(c => c.id)) + 1 }] });
-    }
+  function updateTaskDone(taskIndex, newDone) {
+    setTasks(prev => {
+      const newTasks = [...prev];
+      newTasks[taskIndex].done = newDone;
+      return newTasks;
+    });
   }
 
-  setContacts(cList) {
-    this.setState({
-      contacts: cList
-    })
-  }
+  return (
+    <div className='container'>
+      <h1>My todo list</h1>
+      <Task />
+      <Task />
+      {tasks.map((task, index) => (
+        <Task {...task}
+          onToggle={done => updateTaskDone(index, done)} />
+      ))}
 
-  componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(response => response.json())
-      .then(data => this.setState(
-        { contacts: data.map((c) => { return { id: c.id, name: c.name, phone: c.phone, username: c.username } }) }
-      ))
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <ContactsList contacts={this.state.contacts} updateContacts={this.setContacts} />
-        <AddContactForm addContact={this.addContact} />
-      </div>
-    )
-  }
+      <ToDoForm onAdd={addTask} />
+    </div>
+  );
 }
 
 export default App;
