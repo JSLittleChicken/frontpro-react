@@ -1,11 +1,35 @@
-
 import './App.css';
 import ToDoForm from './components/ToDoForm/ToDoForm';
 import Task from './components/Task/Task';
 import { useState } from "react";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([
+    {
+      name: 'Сходити за покупками',
+      done: true
+    },
+    {
+      name: 'Зробити домашнє завдання',
+      done: true
+    },
+    {
+      name: 'Погратися з котом',
+      done: true
+    },
+    {
+      name: 'Тренування',
+      done: false
+    },
+    {
+      name: 'Забрати речі з хімчистки',
+      done: false
+    },
+    {
+      name: 'Похвалити себе',
+      done: false
+    },
+]);
 
   function addTask(name) {
     setTasks(prev => {
@@ -24,8 +48,6 @@ function App() {
   return (
     <div className='container'>
       <h1>My todo list</h1>
-      <Task />
-      <Task />
       {tasks.map((task, index) => (
         <Task {...task}
           onToggle={done => updateTaskDone(index, done)} />
